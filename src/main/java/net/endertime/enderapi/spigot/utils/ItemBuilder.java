@@ -23,12 +23,6 @@ public class ItemBuilder {
         this.itemMeta = this.itemStack.getItemMeta();
     }
 
-    @SuppressWarnings("deprecation")
-    public ItemBuilder(int id) {
-        this.itemStack = new ItemStack(id);
-        this.itemMeta = this.itemStack.getItemMeta();
-    }
-
     public ItemBuilder(Material material, int amount) {
         this.itemStack = new ItemStack(material, amount);
         this.itemMeta = this.itemStack.getItemMeta();
@@ -36,11 +30,6 @@ public class ItemBuilder {
 
     public ItemBuilder(Material material, int amount, int subID) {
         this.itemStack = new ItemStack(material, amount, (short)subID);
-        this.itemMeta = this.itemStack.getItemMeta();
-    }
-
-    public ItemBuilder(int id, int amount, int subID) {
-        this.itemStack = new ItemStack(id, amount, (short)subID);
         this.itemMeta = this.itemStack.getItemMeta();
     }
 

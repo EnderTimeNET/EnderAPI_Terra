@@ -16,7 +16,7 @@ import net.endertime.enderapi.database.friends.Requests;
 import net.endertime.enderapi.spigot.Spigot;
 import net.endertime.enderapi.spigot.utils.SkullType;
 import net.endertime.enderapi.spigot.utils.*;
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldType;
@@ -25,9 +25,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.Skull;
-import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -284,25 +284,6 @@ public class EnderAPI {
         return false;
     }
 
-    public void updateScoreboardGloballyWithPackets() {
-        for (Player all : Bukkit.getOnlinePlayers()) {
-            if (!EnderAPI.getInstance().isVanished(all)) {
-                for (Player all1 : Bukkit.getOnlinePlayers()) {
-                    if (!EnderAPI.getInstance().isVanished(all)) {
-                        (((CraftPlayer)all).getHandle()).playerConnection.sendPacket((Packet)
-                                new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME,
-                                        (((CraftPlayer)all1).getHandle())));
-                    }
-                }
-                ScoreBoard scoreBoard = EnderAPI.getInstance().getScoreboard(all);
-
-                scoreBoard.a();
-            } else {
-                updateVanishScore(all);
-            }
-        }
-    }
-
     public void sendActionBarGlobal(String message) {
         for (Player p : Bukkit.getOnlinePlayers()) {
             sendActionBar(p, message);
@@ -471,13 +452,6 @@ public class EnderAPI {
         Bukkit.shutdown();
     }
 
-    public Inventory getInventory (Inventory inventory) {
-        for (int i = 0; i < inventory.getSize(); i++) {
-            inventory.setItem(i, getItem(Material.STAINED_GLASS_PANE, 1, 15).setDisplayName("§1").getItemStack());
-        }
-        return inventory;
-    }
-
     public void loadWorld() {
         int worlds = 0;
         for (File files : Bukkit.getWorldContainer().listFiles()) {
@@ -625,52 +599,6 @@ public class EnderAPI {
         p.playSound(p.getLocation(), sound, 0.5F, pitch);
     }
 
-    public void sendJoin(Player p, List<Player> players) {
-        if (!getVanish().contains(p) && !getVanishUUID().contains(p.getUniqueId())) {
-            p.playSound(p.getLocation(), Sound.ENTITY_ILLUSION_ILLAGER_PREPARE_MIRROR, (float) 0.5, 1);
-            for (Player player : players) {
-                if (p.getWorld().getName().equals(player.getWorld().getName()))
-                    sendParticlePacket(player, EnumParticle.CLOUD, p.getLocation(), 0.7, 200, 0.1);
-            }
-        }
-    }
-
-    public void sendJoin(Player p, Collection<? extends  Player> players) {
-        if (!getVanish().contains(p) && !getVanishUUID().contains(p.getUniqueId())) {
-            p.playSound(p.getLocation(), Sound.ENTITY_ILLUSION_ILLAGER_PREPARE_MIRROR, (float) 0.5, 1);
-            for (Player player : players) {
-                if (p.getWorld().getName().equals(player.getWorld().getName()))
-                    sendParticlePacket(player, EnumParticle.CLOUD, p.getLocation(), 0.7, 200, 0.1);
-            }
-        }
-    }
-
-    public void sendParticlePacket(Player p, EnumParticle particle, Location loc, double offset, int amount,
-                                   double speed) {
-        float X = Double.valueOf(loc.getX()).floatValue();
-        float Y = Double.valueOf(loc.getY()).floatValue();
-        float Z = Double.valueOf(loc.getZ()).floatValue();
-        float OFFSET = Double.valueOf(offset).floatValue();
-        float SPEED = Double.valueOf(speed).floatValue();
-        PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle, true, X, Y, Z, OFFSET, OFFSET,
-                OFFSET, SPEED, amount, new int[0]);
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
-    }
-
-    public void sendParticlePacketToAll(EnumParticle particle, Location loc, double offset, int amount,
-                                        double speed) {
-        for (Player all : Bukkit.getOnlinePlayers()) {
-            float X = Double.valueOf(loc.getX()).floatValue();
-            float Y = Double.valueOf(loc.getY()).floatValue();
-            float Z = Double.valueOf(loc.getZ()).floatValue();
-            float OFFSET = Double.valueOf(offset).floatValue();
-            float SPEED = Double.valueOf(speed).floatValue();
-            PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle, true, X, Y, Z, OFFSET,
-                    OFFSET, OFFSET, SPEED, amount, new int[0]);
-            ((CraftPlayer) all).getHandle().playerConnection.sendPacket(packet);
-        }
-    }
-
     public void sendActionBar(Player p, String message) {
         if (!getNoActionbar().contains(p)) {
             CraftPlayer player = (CraftPlayer) p;
@@ -712,24 +640,6 @@ public class EnderAPI {
         return arg0;
     }
 
-    public void updateScoreboardGlobally() {
-        for (Player all : Bukkit.getOnlinePlayers()) {
-            if (!EnderAPI.getInstance().isVanished(all)) {
-                ScoreBoard scoreBoard = EnderAPI.getInstance().getScoreboard(all);
-
-                scoreBoard.a();
-            } else {
-                updateVanishScore(all);
-            }
-        }
-    }
-
-    public void updateVanishScore (Player player) {
-        ScoreBoard scoreBoard = getScoreboard(player);
-
-        scoreBoard.a();
-    }
-
     public String getPrefix(UUID uuid) {
         String prefix = PermAPI.getInstance().getRanks().getPrefix(PermAPI.getInstance().getGroup(uuid));
         if (prefix == null)
@@ -765,20 +675,12 @@ public class EnderAPI {
         return new ItemBuilder(material);
     }
 
-    public ItemBuilder getItem(int id) {
-        return new ItemBuilder(id);
-    }
-
     public ItemBuilder getItem(Material material, int amount) {
         return new ItemBuilder(material, amount);
     }
 
     public ItemBuilder getItem(Material material, int amount, int subID) {
         return new ItemBuilder(material, amount, subID);
-    }
-
-    public ItemBuilder getItem(int id, int amount, int subID) {
-        return new ItemBuilder(id, amount, subID);
     }
 
     public ItemBuilder getItem(ItemStack itemStack) {
@@ -856,15 +758,6 @@ public class EnderAPI {
         getPlugin().sendServerMessage( receiver, "account_subtitle", array );
     }
 
-
-    public ScoreBoard getScoreboard(Player p) {
-        if (ScoreBoard.getScoreboards().keySet().contains(p)) {
-            return ScoreBoard.getScoreboards().get(p);
-        } else {
-            return new ScoreBoard(p);
-        }
-    }
-
     public void removeOnTablist (Player p, GameProfile gameProfile) {
         MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
         WorldServer worldServer = ((CraftWorld)p.getWorld()).getHandle();
@@ -877,41 +770,6 @@ public class EnderAPI {
         packetPlayOutPlayerInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME,
                 (((CraftPlayer)p).getHandle()));
         (((CraftPlayer)p).getHandle()).playerConnection.sendPacket(packetPlayOutPlayerInfo);
-    }
-
-    public void hidePlayer (Player p, Player hide) {
-        //p.hidePlayer(getPlugin(), hide);
-        PacketPlayOutEntityDestroy entityDestroyPacket = new PacketPlayOutEntityDestroy(((CraftPlayer)hide).getEntityId());
-        PacketPlayOutPlayerInfo playerInfoRemovePacket = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER,
-                ((CraftPlayer)hide).getHandle());
-        (((CraftPlayer)p).getHandle()).playerConnection.sendPacket(playerInfoRemovePacket);
-        (((CraftPlayer)p).getHandle()).playerConnection.sendPacket(entityDestroyPacket);
-    }
-
-    public void showPlayer (Player p, Player show) {
-        //p.showPlayer(getPlugin(), show);
-        PacketPlayOutNamedEntitySpawn entitySpawnPacket = new PacketPlayOutNamedEntitySpawn(((CraftPlayer)show).getHandle());
-        PacketPlayOutPlayerInfo playerInfoAddPacket = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER,
-                ((CraftPlayer)show).getHandle());
-        PacketPlayOutEntityEquipment entityEquipmentPacketHelmet = new PacketPlayOutEntityEquipment
-                (((((CraftPlayer) show).getHandle()).getId()),
-                        EnumItemSlot.HEAD, (((CraftPlayer)show).getHandle()).getEquipment(EnumItemSlot.HEAD));
-        PacketPlayOutEntityEquipment entityEquipmentPacketChest = new PacketPlayOutEntityEquipment
-                (((((CraftPlayer) show).getHandle()).getId()),
-                        EnumItemSlot.CHEST, (((CraftPlayer)show).getHandle()).getEquipment(EnumItemSlot.CHEST));
-        PacketPlayOutEntityEquipment entityEquipmentPacketLeggings = new PacketPlayOutEntityEquipment
-                (((((CraftPlayer) show).getHandle()).getId()),
-                        EnumItemSlot.LEGS, (((CraftPlayer)show).getHandle()).getEquipment(EnumItemSlot.LEGS));
-        PacketPlayOutEntityEquipment entityEquipmentPacketBoots = new PacketPlayOutEntityEquipment
-                (((((CraftPlayer) show).getHandle()).getId()),
-                        EnumItemSlot.FEET, (((CraftPlayer)show).getHandle()).getEquipment(EnumItemSlot.FEET));
-
-        (((CraftPlayer)p).getHandle()).playerConnection.sendPacket(playerInfoAddPacket);
-        (((CraftPlayer)p).getHandle()).playerConnection.sendPacket(entitySpawnPacket);
-        (((CraftPlayer)p).getHandle()).playerConnection.sendPacket(entityEquipmentPacketHelmet);
-        (((CraftPlayer)p).getHandle()).playerConnection.sendPacket(entityEquipmentPacketChest);
-        (((CraftPlayer)p).getHandle()).playerConnection.sendPacket(entityEquipmentPacketLeggings);
-        (((CraftPlayer)p).getHandle()).playerConnection.sendPacket(entityEquipmentPacketBoots);
     }
 
     public List<Player> getNoActionbar() {

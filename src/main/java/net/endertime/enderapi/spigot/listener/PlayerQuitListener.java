@@ -24,11 +24,5 @@ public class PlayerQuitListener implements Listener {
         if (EnderAPI.getInstance().getNoActionbar().contains(player)) {
             EnderAPI.getInstance().getNoActionbar().remove(player);
         }
-
-        for (Player all : Bukkit.getOnlinePlayers()) {
-            if (!player.getUniqueId().equals(all.getUniqueId())) {
-                EnderAPI.getInstance().hidePlayer(all, player);
-            }
-        }
     }
 }

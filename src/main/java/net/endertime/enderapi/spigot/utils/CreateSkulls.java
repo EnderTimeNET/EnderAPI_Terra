@@ -20,7 +20,7 @@ public class CreateSkulls {
 
         UUID uuid = EnderAPI.getInstance().getEnderDatabase().getUUID(name);
 
-        ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         GameProfile profile = new GameProfile(uuid, EnderAPI.getInstance().getEnderDatabase().getName(uuid));
@@ -47,7 +47,7 @@ public class CreateSkulls {
 
     public static ItemStack createSkull(UUID uuid) {
 
-        ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         GameProfile profile = new GameProfile(uuid, EnderAPI.getInstance().getEnderDatabase().getName(uuid));
@@ -74,7 +74,7 @@ public class CreateSkulls {
 
     public static ItemStack createSkull(String value, String name) {
 
-        ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         headMeta.setDisplayName("§7" + name);
@@ -102,7 +102,7 @@ public class CreateSkulls {
 
     public static ItemStack createSkullValue(String value) {
 
-        ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
@@ -146,8 +146,8 @@ public class CreateSkulls {
     }
 
     public static boolean setBlock(Block block, String signature, String value) {
-        if ((block.getType() != Material.SKULL) && (block.getType() != Material.SKULL_ITEM)) {
-            block.setType(Material.SKULL);
+        if ((block.getType() != Material.PLAYER_HEAD) && (block.getType() != Material.PLAYER_HEAD)) {
+            block.setType(Material.PLAYER_HEAD);
         }
         try {
             Object nmsWorld = block.getWorld().getClass().getMethod("getHandle", new Class[0]).invoke(block.getWorld(),

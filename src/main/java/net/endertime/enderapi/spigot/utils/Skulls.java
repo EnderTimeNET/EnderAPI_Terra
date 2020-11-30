@@ -32,7 +32,7 @@ public class Skulls {
             this.itemStack = CreateSkulls.createSkull(uuid);
             this.itemMeta = this.itemStack.getItemMeta();
         } else {
-            this.itemStack = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+            this.itemStack = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
             this.itemMeta = this.itemStack.getItemMeta();
             this.skullMeta = (SkullMeta) this.itemMeta;
             this.skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
@@ -56,7 +56,7 @@ public class Skulls {
             this.itemMeta = this.itemStack.getItemMeta();
             this.skullMeta = (SkullMeta) this.itemStack.getItemMeta();
         } catch (NullPointerException e) {
-            this.itemStack = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+            this.itemStack = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
             SkullMeta skullMeta = (SkullMeta) this.itemStack.getItemMeta();
             skullMeta.setOwner(name);
             this.itemStack.setItemMeta(skullMeta);

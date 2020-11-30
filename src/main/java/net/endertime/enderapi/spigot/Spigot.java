@@ -70,7 +70,6 @@ public class Spigot extends JavaPlugin {
         pm.registerEvents(new PlayerJoinListener(), this);
 
 
-        pm.registerEvents(new BadlionListener(), this);
         pm.registerEvents(new PlayerQuitListener(), this);
         pm.registerEvents(new TabCompleteListener(), this);
     }
