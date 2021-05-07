@@ -33,7 +33,8 @@ public class MySQL {
         getHikari().setRegisterMbeans(true);
         getHikari().setMaximumPoolSize(10);
         getHikari().setConnectionTestQuery("SELECT 1");
-        getHikari().setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+        //getHikari().setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+        getHikari().setDataSourceClassName("com.mysql.cj.jdbc.MysqlDataSource");
         getHikari().addDataSourceProperty("serverName", host);
         getHikari().addDataSourceProperty("port", port);
         getHikari().addDataSourceProperty("databaseName", database);

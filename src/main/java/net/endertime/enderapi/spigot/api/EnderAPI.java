@@ -736,28 +736,6 @@ public class EnderAPI {
         return false;
     }
 
-    public void setSubtitle( Player receiver, UUID subtitlePlayer, String value ) {
-        // List of all subtitles
-        JsonArray array = new JsonArray();
-
-        // Add subtitle
-        JsonObject subtitle = new JsonObject();
-        subtitle.addProperty( "uuid", subtitlePlayer.toString() );
-
-        // Optional: Size of the subtitle
-        subtitle.addProperty( "size", 1.2d ); // Range is 0.8 - 1.6 (1.6 is Minecraft default)
-
-        // no value = remove the subtitle
-        if(value != null)
-            subtitle.addProperty( "value", value );
-
-        // You can set multible subtitles in one packet
-        array.add(subtitle);
-
-        // Send to LabyMod using the API
-        getPlugin().sendServerMessage( receiver, "account_subtitle", array );
-    }
-
     public void removeOnTablist (Player p, GameProfile gameProfile) {
         MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
         WorldServer worldServer = ((CraftWorld)p.getWorld()).getHandle();
