@@ -155,6 +155,36 @@ public class MySQL {
         return f;
     }
 
+    public Double getDouble(net.endertime.enderapi.database.databaseapi.mysql.PreparedStatement arg0, String returned){
+        Connection connection = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        double d = 0;
+
+        try {
+            connection = getHikari().getConnection();
+
+            ps = connection.prepareStatement(arg0.getUpdate());
+            for(int i = 1; i <= arg0.getPreset().keySet().size(); i++) {
+                Object object = arg0.getPreset().get(i);
+                setObject(i, object, ps);
+            }
+
+            rs = ps.executeQuery();
+
+            if(rs.next()){
+                d = rs.getDouble(returned);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnections(rs, ps, connection);
+        }
+        return d;
+    }
+
     public Long getLong(net.endertime.enderapi.database.databaseapi.mysql.PreparedStatement arg0, String returned){
         Connection connection = null;
 
